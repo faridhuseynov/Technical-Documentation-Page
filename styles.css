@@ -1,0 +1,67 @@
+body {
+    box-sizing: border-box;
+    margin-left: 0px;
+    height:2400px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 20% 70%;
+    grid-template-rows: auto;
+    
+}
+
+#navbar {
+    display: flex;
+    flex-direction: column;
+    column-width: auto;
+    height: 100%;
+    width: auto;
+    font-size: 20px;
+    border: gray solid 1px;
+    height: 900px;
+}
+
+.nav-link {
+    border: 1px solid gray;
+    padding: 15px;
+}
+
+.nav-header {
+    border: 1px solid gray;
+    padding: 15px;
+    
+}
+
+header {
+    font-size: 25px;
+    font-family: 'Open Sans', sans-serif;
+    padding-left: 30px;
+
+}
+
+p {
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
+    padding-left: 30px;
+}
+
+li {
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
+    margin-top: 5px;
+    margin-left: 50px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#main-doc {
+    position: absolute;
+    margin-left: 255px;
+}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Documenttation Page</title>
+    <link href="./styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <nav id="navbar">
+            <header class="nav-header">MSDN ViewComponent</header>
+            <a href="#View_components" class="nav-link">View components</a>
+            <a href="#Creating_a_view_component" class="nav-link">Creating a view component</a>
+            <a href="#The_view_component_class" class="nav-link">The view component class</a>
+            <a href="#View_component_methods" class="nav-link">View component methods</a>
+            <a href="#View_search_path" class="nav-link">View search path</a>
+        </nav>
+        <main id="main-doc">
+            <section id="View_components" class="main-section">
+                <header>View components</header>
+                <p>
+                    View components are similar to partial views, but they're much more powerful. View components don't use
+                    model binding, and only depend on the data provided when calling into it. This article was written using
+                    controllers and views, but view components also work with Razor Pages.
+                </p>
+                <p>
+                    A view component:
+    
+                <ul>
+                    <li>Renders a chunk rather than a whole response.</li>
+                    <li>Includes the same separation-of-concerns and testability benefits found between a controller and
+                        view.</li>
+                    <li>Can have parameters and business logic.</li>
+                    <li>Is typically invoked from a layout page.</li>
+                </ul>
+                </p>
+    
+                <p>
+                    View components are intended anywhere you have reusable rendering logic that's too complex for a partial
+                    view, such as:
+                <ul>
+                    <li>Dynamic navigation menus</li>
+                    <li>Tag cloud (where it queries the database)</li>
+                    <li>Login panel</li>
+                    <li>Shopping cart</li>
+                    <li>Recently published articles</li>
+                    <li>Sidebar content on a typical blog</li>
+                    <li>A login panel that would be rendered on every page and show either the links to log out or log in,
+                        depending on the log in state of the user</li>
+                </ul>
+    
+                <p>
+                    A view component consists of two parts: the class
+                    (typically derived from <a
+                        href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.viewcomponent">ViewComponent</a>)
+                    and the result
+                    it returns (typically a view).
+                    Like controllers, a view component can be a POCO, but most developers will want to take advantage of the
+                    methods and properties available by deriving from
+                    <code>ViewComponent</code>.
+    
+                    When considering if view components meet an app's specifications, consider using Razor components
+                    instead. Razor components also combine markup with C# code to produce reusable UI units. Razor
+                    components are designed for developer productivity when providing client-side UI logic and composition.
+                    For more information, see <a
+                        href="https://docs.microsoft.com/en-us/aspnet/core/blazor/components/?view=aspnetcore-5.0">Create
+                        and use ASP.NET Core Razor components</a>. For information on how to incorporate Razor components
+                    into an MVC or Razor Pages app, see <a
+                        href="https://docs.microsoft.com/en-us/aspnet/core/blazor/components/prerendering-and-integration?pivots=server&view=aspnetcore-5.0">Prerender
+                        and integrate ASP.NET Core Razor components</a>.
+                </p>
+            </section>
+    
+            <section id="Creating_a_view_component" class="main-section">
+                <header>Creating a view component</header>
+                <p>This section contains the high-level requirements to create a view component.
+                    Later in the article, we'll examine each step in detail and create a view component.</p>
+            </section>
+    
+            <section id="The_view_component_class" class="main-section">
+                <header>The view component class</header>
+                <p>
+                    A view component class can be created by any of the following:
+                <ul>
+                    <li>Deriving from <i>ViewComponent</i></li>
+                    <li>Decorating a class with the <code>[ViewComponent]</code> attribute, or deriving from a class with
+                        the <code>[ViewComponent]</code> attribute</li>
+                    <li>Creating a class where the name ends with the suffix <i>ViewComponent</i></li>
+                </ul>
+                </p>
+                <p>
+                    Like controllers, view components must be public, non-nested, and non-abstract classes.
+                    The view component name is the class name with the "ViewComponent" suffix removed.
+                    It can also be explicitly specified using the <code>ViewComponentAttribute.Name</code> property.
+                    <br>
+                    A view component class:
+                <ul>
+                    <li>Fully supports constructor <a
+                            href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0"></a>dependency
+                        injection</li>
+                    <li>Doesn't take part in the controller lifecycle, which means you can't use
+                        <a
+                            href="https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/filters?view=aspnetcore-5.0">filters</a>
+                        in a view component
+                    </li>
+                </ul>
+                </p>
+            </section>
+    
+            <section id="View_component_methods" class="main-section">
+                <header>View component methods</header>
+                <p>
+                    A view component defines its logic in an <code>InvokeAsync</code> method that returns a
+                    <code>Task&lt;IViewComponentResult&gt;</code> or in a
+                    synchronous <code>Invoke</code> method that returns an <code>IViewComponentResult</code>. Parameters
+                    come directly from invocation of the view component,
+                    not from model binding. A view component never directly handles a request. Typically, a view component
+                    initializes a model and passes
+                    it to a view by calling the <code>View</code> method. In summary, view component methods:
+                <ul>
+                    <li>Define an <code>InvokeAsync</code> method that returns a
+                        <code>Task&lt;IViewComponentResult&gt;</code> or a synchronous <code>Invoke</code>
+                        method that returns an <code>IViewComponentResult</code>.
+                    </li>
+                    <li>Typically initializes a model and passes it to a view by calling the <code>ViewComponent</code>
+                        <code>View</code> method.
+                    </li>
+                    <li>Parameters come from the calling method, not HTTP. There's no model binding.</li>
+                    <li>Are not reachable directly as an HTTP endpoint. They're invoked from your code (usually in a view).
+                        A view component never handles a request.</li>
+                    <li>Are overloaded on the signature rather than any details from the current HTTP request.</li>
+                </ul>
+                </p>
+            </section>
+    
+            <section id="View_search_path" class="main-section">
+                <header>View search path</header>
+                <p>
+                    The runtime searches for the view in the following paths:
+                <ul>
+                    <li>/Views/{Controller Name}/Components/{View Component Name}/{View Name}</li>
+                    <li>/Views/Shared/Components/{View Component Name}/{View Name}</li>
+                    <li>/Pages/Shared/Components/{View Component Name}/{View Name}</li>
+                </ul>
+                </p>
+                <p>
+                    The search path applies to projects using controllers + views and Razor Pages.
+                </p>
+                <p>
+                    The default view name for a view component is Default, which means your view file will typically be
+                    named
+                    Default.cshtml.
+                    You can specify a different view name when creating the view component result or when calling the
+                    <code>View</code> method.
+                    <br>
+                    We recommend you name the view file Default.cshtml and use the
+                    <br>
+                    <i>Views/Shared/Components/{View Component Name}/{View Name}</i> path. The <code>PriorityList</code>
+                    view
+                    component used in this sample uses
+                    <br>
+                    <i>Views/Shared/Components/PriorityList/Default.cshtml</i> for the view component view.
+                </p>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>
