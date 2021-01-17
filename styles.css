@@ -1,17 +1,19 @@
 body {
     box-sizing: border-box;
     margin-left: 0px;
-    height:2400px;
+    background-color: yellow;
 }
 
 .container {
+    position: relative;
     display: grid;
     grid-template-columns: 20% 70%;
     grid-template-rows: auto;
-    
+    background-color: green;
 }
 
 #navbar {
+    position: fixed;
     display: flex;
     flex-direction: column;
     column-width: auto;
@@ -63,5 +65,5 @@ a:hover {
 
 #main-doc {
     position: absolute;
-    margin-left: 255px;
+    margin-left: 305px;
 }
